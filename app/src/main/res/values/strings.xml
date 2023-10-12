@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">mvcExempel</string>
+    <string name="text_name_hint">name</string>
+    <string name="text_password_hint">password</string>
+    <string name="btn_login_text">Login</string>
+    <string name="btn_register_text">Register</string>
+</resources>
