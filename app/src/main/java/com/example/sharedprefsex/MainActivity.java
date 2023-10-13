@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
 
 //              ---------Shared Prefs-----------
 
-//              String s = sp.getString("saved", "no key found");
+//              String s = dataManager.loadStringFromSharedPrefs("name");
 //              displayText.setText(s);
             }
         });
