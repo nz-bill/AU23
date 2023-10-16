@@ -7,19 +7,30 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.List;
+
+public class MainActivity extends AppCompatActivity implements MainContract.View, MemberContract.View {
+
+    MainContract.Presenter presenter;
+    MemberContract.Presenter memberPresenter;
 
     EditText userNameInput;
     EditText userPasswordInput;
+    ListView memberListView;
 
-    DataManager dataManager = new DataManager();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        presenter = new MainPresenter(new DataManager(), this, new Navigator(this));
+        memberPresenter = new MemberPresenter(new DataManager(), this);
+
+        memberListView = findViewById(R.id.lv_members);
 
         userNameInput = findViewById(R.id.et_name);
         userPasswordInput = findViewById(R.id.et_password);
@@ -30,11 +41,8 @@ public class MainActivity extends AppCompatActivity {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String name = userNameInput.getText().toString();
-                String password = userPasswordInput.getText().toString();
-
-                User u = dataManager.createUser(name,password);
-                Toast.makeText(MainActivity.this, u.toString(), Toast.LENGTH_SHORT).show();
+                presenter.onRegisterButtonClicked();
+                memberPresenter.onViewCreated();
 
             }
         });
@@ -42,18 +50,47 @@ public class MainActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String name = userNameInput.getText().toString();
-                String password = userPasswordInput.getText().toString();
-
-                if(dataManager.validateUser(name, password)){
-                    Intent intent = new Intent(MainActivity.this, MemberActivity.class);
-                    startActivity(intent);
-//                    Toast.makeText(MainActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
-                } else{
-                    Toast.makeText(MainActivity.this, "Login Failed, wrong username/password", Toast.LENGTH_SHORT).show();
-                }
-
+                presenter.onLoginButtonClicked();
             }
         });
+
+        presenter.onViewCreated();
+    }
+
+    @Override
+    public void showLoginSuccessMessage() {
+        Toast.makeText(this, "Login successful", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void showLoginFaildMessage() {
+        Toast.makeText(this, "wrong username/ password", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void showRegisteredSuccessMessage(User user) {
+        String s ="user " + user.getUserName() + " registered";
+        Toast.makeText(this,s , Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void showRegisteredFailedMessage() {
+        Toast.makeText(this, "registration failed", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public String getUserName() {
+        return userNameInput.getText().toString();
+    }
+
+    @Override
+    public String getUserPassword() {
+        return userPasswordInput.getText().toString();
+    }
+
+    @Override
+    public void displayMembers(List<User> members) {
+        MemberAdapter adapter = new MemberAdapter(this,members);
+        memberListView.setAdapter(adapter);
     }
 }

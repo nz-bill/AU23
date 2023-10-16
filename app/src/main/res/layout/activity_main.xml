@@ -47,4 +47,14 @@
         app:layout_constraintTop_toBottomOf="@+id/et_password"
         />
 
+    <ListView
+        android:id="@+id/lv_members"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_login"
+        tools:listitem="@layout/listitem_member"
+        android:layout_margin="@dimen/margin_medium"
+        />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

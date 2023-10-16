@@ -1,10 +1,11 @@
 package com.example.mvcexempel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class DataManager {
 
-    public static ArrayList<User> users = new ArrayList<>();
+    private static ArrayList<User> users = new ArrayList<>();
 
     public User createUser(String name, String password){
         User user = new User(name,password);
@@ -25,5 +26,7 @@ public class DataManager {
         return false;
     }
 
-
+    public  List<User> getUsers() {
+        return users;
+    }
 }
