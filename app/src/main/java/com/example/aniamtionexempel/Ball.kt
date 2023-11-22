@@ -2,22 +2,35 @@ package com.example.aniamtionexempel
 
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.Rect
 
-class Ball(context: Context) {
+open class Ball(context: Context, var posX:Float, var posY:Float, var size:Float, var speedX: Float, var speedY:Float,color: Int) {
 
-    var posX = 0f
-    var posY = 0f
+
     var paint = Paint()
-    var size = 10f
-    var speed = 5f
-
-    fun update(){
-        posY += speed
-        posX += speed
+    init {
+        paint.color = color
     }
 
-    fun draw(canvas: Canvas?){
-        canvas?.drawCircle(posX,posY, size, paint)
+    fun checkBounds(bounds: Rect){
+        if(posX-size < bounds.left || posX+size > bounds.right){
+            speedX *= -1
+            posX += speedX*1.2f
+        }
+        if(posY-size < bounds.top || posY+size > bounds.bottom){
+            speedY *= -1
+            posY += speedY*1.2f
+        }
+
+    }
+    fun update(){
+        posX += speedX
+        posY += speedY
+    }
+
+   open fun draw(canvas: Canvas?){
+        canvas?.drawCircle(posX,posY,size,paint)
     }
 }

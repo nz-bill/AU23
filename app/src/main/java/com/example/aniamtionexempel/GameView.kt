@@ -3,9 +3,13 @@ package com.example.aniamtionexempel
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.Rect
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import kotlin.math.abs
+import kotlin.math.pow
+import kotlin.math.sqrt
 
 class GameView(context: Context): SurfaceView(context),SurfaceHolder.Callback, Runnable {
 
@@ -14,6 +18,7 @@ class GameView(context: Context): SurfaceView(context),SurfaceHolder.Callback, R
     lateinit var canvas: Canvas
     lateinit var ball1: Ball
     lateinit var ball2: Ball
+    var bounds = Rect()
     var mHolder : SurfaceHolder? = holder
 
     init {
@@ -25,15 +30,45 @@ class GameView(context: Context): SurfaceView(context),SurfaceHolder.Callback, R
     }
 
     private fun setup() {
-        ball1 = Ball(this.context)
-        ball2 = Ball(this.context)
-        ball1.posX = 100f
-        ball1.posY = 100f
-        ball2.posX =500f
-        ball2.speed = 0f
-        ball2.posY = 400f
-        ball1.paint.color = Color.RED
-        ball2.paint.color = Color.GREEN
+        ball1 = Ball(this.context,100f,100f,20f,5f,5f, Color.RED)
+       // ball2 = Ball(this.context,400f,100f,20f,0f,0f, Color.GREEN)
+
+        ball2 = PlayerBall(this.context,400f,100f,32f,0f,0f, Color.GREEN)
+
+    }
+
+    fun onBallCollision(b1:Ball,b2:Ball){
+
+    if(b1.posX < b2.posX && b1.posY < b2.posY){
+        b1.speedX = abs(b1.speedX) * -1
+        b1.speedY = abs(b1.speedY) * -1
+    }
+        if(b1.posX < b2.posX && b1.posY > b2.posY){
+            b1.speedX = abs(b1.speedX) * -1
+            b1.speedY = abs(b1.speedY)
+        }
+        if(b1.posX > b2.posX && b1.posY < b2.posY){
+            b1.speedX = abs(b1.speedX)
+            b1.speedY = abs(b1.speedY) * -1
+        }
+        if(b1.posX > b2.posX && b1.posY < b2.posY){
+            b1.speedX = abs(b1.speedX)
+            b1.speedY = abs(b1.speedY)
+        }
+
+
+
+
+    //        b1.speedX *= -1
+//        b1.speedY *= -1
+       // b2.paint.color = Color.YELLOW
+    }
+
+
+    fun ballIntersects(b1:Ball,b2:Ball){
+        if(sqrt((b1.posX - b2.posX.toDouble()).pow(2.0) + (b1.posY - b2.posY.toDouble()).pow(2.0)) <= b1.size+b2.size){
+            onBallCollision(b1,b2)
+        }
     }
 
     fun start(){
@@ -72,11 +107,12 @@ class GameView(context: Context): SurfaceView(context),SurfaceHolder.Callback, R
     }
 
     override fun surfaceCreated(holder: SurfaceHolder) {
-        start()
+
     }
 
     override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
-
+        bounds = Rect(0,0,width,height)
+        start()
     }
 
     override fun surfaceDestroyed(holder: SurfaceHolder) {
@@ -87,6 +123,10 @@ class GameView(context: Context): SurfaceView(context),SurfaceHolder.Callback, R
       while (running){
           update()
           draw()
+          ball1.checkBounds(bounds)
+          ballIntersects(ball1,ball2)
+
+
       }
     }
 }
