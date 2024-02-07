@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    
+    var nyVariabel: String = "hej"
     var todoItems = [
     TodoItem(title: "vakna", isCompleted: true),
     TodoItem(title: "ät frukost", isCompleted: false),
