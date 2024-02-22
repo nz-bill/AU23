@@ -13,7 +13,7 @@ struct ApiService{
     
     let headers = [
       "accept": "application/json",
-      "Authorization": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1NTJiNmJhZDEyY2UyZDNlOTU2MDM1MDJjMTNiNmIxMyIsInN1YiI6IjY1ZDViMzU2YzhhNWFjMDE3YmUxYzJlMyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.5ocO2DnmoAXnC_mrbCsifO3f8aSt9bjhxzF_BJC6kDc"
+      "Authorization": "Bearer <<<access token>>>"
     ]
 
     func getMovie(query: String, completion: @escaping (Result<[Movie], Error>) -> Void){
