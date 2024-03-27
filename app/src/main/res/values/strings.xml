@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">RealmExempel</string>
+    <string name="edit_text_name">name</string>
+    <string name="edit_text_score">score</string>
+    <string name="switch_is_human_text">is Human</string>
+    <string name="btn_update_text">update</string>
+    <string name="btn_add_text">add</string>
+
+</resources>
